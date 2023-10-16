@@ -7,6 +7,7 @@ class TestCreateBankAccount(unittest.TestCase):
     imie = "Dariusz"
     nazwisko = "Januszewski"
     pesel = "12345678901"
+    working_promo_code = "PROM_XYZ"
 
     def test_tworzenie_konta(self):
         pierwsze_konto = Konto(self.imie, self.nazwisko,self.pesel)
@@ -29,23 +30,40 @@ class TestCreateBankAccount(unittest.TestCase):
 
     def test_wrong_prefix_promo(self):
         konto = Konto(self.imie, self.nazwisko, self.pesel, "prom_123")
-        self.assertEqual(konto.saldo,0, "Saldo nie jest zerowe!")
+        self.assertEqual(konto.saldo,0, "Promocja nie została zaliczona")
 
     def test_wrong_sufix_promo(self):
         konto = Konto(self.imie, self.nazwisko, self.pesel, "PROM_123sadd")
-        self.assertEqual(konto.saldo,0, "Saldo nie jest zerowe!")
+        self.assertEqual(konto.saldo,0, "Promocja nie została zaliczona")
 
     def test_wrong_len_promo(self):
         konto = Konto(self.imie, self.nazwisko, self.pesel, "PROM_")
-        self.assertEqual(konto.saldo, 0, "Saldo nie jest zerowe!")
+        self.assertEqual(konto.saldo, 0, "Promocja nie została zaliczona")
 
     def test_correct_promo(self):
         konto = Konto(self.imie, self.nazwisko, self.pesel, "PROM_XYZ")
         self.assertEqual(konto.saldo, 50, "promocja nie zostala naliczona")
 
-    # def test_promo_year_59 (self):
-    # def test_promo_year_61 (self):
-    # def test_promo_year_60 (self):
-    # def test_promo_year_2001 (self):
-    # def test_promo_year_2001_wrong_promo (self):
-    # def test_promo_year_ (self):
+    def test_promo_year_59 (self):
+        konto = Konto(self.imie, self.nazwisko, "59111832855", self.working_promo_code)
+        self.assertEqual(konto.saldo, 0 ,"Promocja nie została zaliczona")
+
+    def test_promo_year_61 (self):
+        konto = Konto(self.imie, self.nazwisko, "61042888766", self.working_promo_code)
+        self.assertEqual(konto.saldo, 50, "Promocja została zaliczona")
+
+    def test_promo_year_60 (self):
+        konto = Konto(self.imie, self.nazwisko, "60081777978", self.working_promo_code)
+        self.assertEqual(konto.saldo, 50, "Promocja została zaliczona")
+
+    def test_promo_year_2001 (self):
+        konto = Konto(self.imie, self.nazwisko, "01282874666", self.working_promo_code)
+        self.assertEqual(konto.saldo, 50, "Promocja została zaliczona")
+
+    def test_promo_year_2001_wrong_promo (self):
+        konto = Konto(self.imie, self.nazwisko, "01282874666", "PROM")
+        self.assertEqual(konto.saldo, 0, "Promocja nie została zaliczona")
+
+    def test_promo_year_2001_correct_promo (self):
+        konto = Konto(self.imie, self.nazwisko, "01282874666", self.working_promo_code)
+        self.assertEqual(konto.saldo, 50, "Promocja została zaliczona")
