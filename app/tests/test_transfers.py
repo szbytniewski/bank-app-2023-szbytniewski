@@ -20,6 +20,11 @@ class TestTransfer(unittest.TestCase):
         pierwsze_konto.zaksieguj_przelew_przychodzacy(100)
         self.assertEqual(pierwsze_konto.saldo, 100, "Saldo nie jest poprawne")
 
+    def test_incoming_transfer_0(self):
+        pierwsze_konto = KontoOsobiste(self.personal_data["name"], self.personal_data["surname"],self.personal_data["pesel"])
+        pierwsze_konto.zaksieguj_przelew_przychodzacy(0)
+        self.assertEqual(pierwsze_konto.saldo, 0, "Saldo nie jest poprawne")
+
     def test_incoming_transfer_with_incorrect_amount(self):
         pierwsze_konto = KontoOsobiste(self.personal_data["name"], self.personal_data["surname"],self.personal_data["pesel"])
         pierwsze_konto.zaksieguj_przelew_przychodzacy(-100)
@@ -30,7 +35,12 @@ class TestTransfer(unittest.TestCase):
         pierwsze_konto.saldo = 120
         pierwsze_konto.przelew_wychodzacy(100)
         self.assertEqual(pierwsze_konto.saldo, 20, "Saldo nie jest poprawne!")
-
+    
+    def test_outgoing_transfer_0(self):
+        pierwsze_konto = KontoOsobiste(self.personal_data["name"], self.personal_data["surname"],self.personal_data["pesel"])
+        pierwsze_konto.saldo = 120
+        pierwsze_konto.przelew_wychodzacy(0)
+        self.assertEqual(pierwsze_konto.saldo, 120, "Saldo nie jest poprawne!")
 
     def test_outgoing_transfer_amount_greater_than_saldo(self):
         pierwsze_konto = KontoOsobiste(self.personal_data["name"], self.personal_data["surname"],self.personal_data["pesel"])
@@ -48,5 +58,16 @@ class TestTransfer(unittest.TestCase):
         konto.zaksieguj_przelew_przychodzacy(100)
         konto.zaksieguj_przelew_przychodzacy(120)
         konto.przelew_wychodzacy(50)
-        self.assertEqual()
-    # Dodaj wiecej testow
+        self.assertEqual(konto.saldo, 100+120-50, "Saldo nie jest poprawne!")
+
+    def test_express_transfer_personal_account(self):
+        konto = KontoOsobiste(self.personal_data["name"], self.personal_data["surname"],self.personal_data["pesel"])
+        konto.saldo = 120
+        konto.przelew_wychodzacy_exspressowy_personal(20)
+        self.assertEqual(konto.saldo, 100-1, "Saldo nie jest porpawne")
+
+    def test_express_transfer_company_account(self):
+        konto = KontoFirmowe(self.personal_data["name"], self.personal_data["surname"])
+        konto.saldo = 120
+        konto.przelew_wychodzacy_exspressowy_comapny(20)
+        self.assertEqual(konto.saldo, 100-5, "Saldo nie jest porpawne")

@@ -6,6 +6,7 @@ class KontoOsobiste(Konto):
         self.imie = imie
         self.nazwisko = nazwisko
         self.saldo = 0
+        self.express_transfer_fee_personal = 1
 
         if len(pesel) != 11:
             self.pesel = "Niepoprawny pesel!"
@@ -13,9 +14,9 @@ class KontoOsobiste(Konto):
             self.pesel = pesel
 
         if self.is_promo_code_correct(promo_code) and self.is_customer_eligible_for_promo(promo_code):
-            self.saldo = 50
+            self.saldo += 50
         else:
-            self.saldo = 0
+            self.saldo += 0
     
     def is_promo_code_correct(self, promo_code):
         if promo_code is None:
