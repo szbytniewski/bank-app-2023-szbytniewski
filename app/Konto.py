@@ -1,12 +1,8 @@
 class Konto:
-    def __init__(self):
-        self.saldo = 0
 
     def check_if_int(self,kwota):
         if isinstance(kwota,int):
             return True
-        else:
-            return False
    
     def zaksieguj_przelew_przychodzacy(self, kwota):
         if kwota > 0 and self.check_if_int(kwota):

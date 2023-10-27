@@ -14,7 +14,6 @@ class KontoOsobiste(Konto):
             self.pesel = "Niepoprawny pesel!"
         else:
             self.pesel = pesel
-
         if self.is_promo_code_correct(promo_code) and self.is_customer_eligible_for_promo(promo_code):
             self.saldo += 50
         else:
