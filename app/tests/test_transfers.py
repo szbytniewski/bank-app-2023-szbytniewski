@@ -67,7 +67,7 @@ class TestTransfer(unittest.TestCase):
         self.assertEqual(konto.saldo, 100-1, "Saldo nie jest porpawne")
 
     def test_express_transfer_company_account(self):
-        konto = KontoFirmowe(self.personal_data["name"], self.personal_data["surname"])
+        konto = KontoFirmowe(self.company_data["name"], self.company_data["nip"])
         konto.saldo = 120
         konto.przelew_wychodzacy_exspressowy_comapny(20)
         self.assertEqual(konto.saldo, 100-5, "Saldo nie jest porpawne")

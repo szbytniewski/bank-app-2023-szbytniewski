@@ -67,3 +67,12 @@ class TestCreateBankAccount(unittest.TestCase):
     def test_promo_year_2001_correct_promo (self):
         konto = KontoOsobiste(self.imie, self.nazwisko, "01282874666", self.working_promo_code)
         self.assertEqual(konto.saldo, 50, "Promocja została zaliczona")
+
+    def test_correct_promo_eligibility(self):
+        result = KontoOsobiste.is_customer_eligible_for_promo(self,None)
+        self.assertEqual(result, False, "Niepoprawny pesel!")
+
+    def test_correct_promo_age(self):
+        result = KontoOsobiste.customer_age_calculation(self,None)
+        self.assertEqual(result, False, "Niepoprawny pesel!")
+

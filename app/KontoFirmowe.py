@@ -6,6 +6,8 @@ class KontoFirmowe(Konto):
         self.name = name
         self.saldo = 0
         self.express_transfer_fee_comapny = 5
+        self.history = []
+
         if len(nip) != 10:
             self.nip = "Niepoprawny NIP!"
         else:
