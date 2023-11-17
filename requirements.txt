@@ -1,2 +1,5 @@
 coverage==6.5.0
 parameterized==0.9.0
+
+[run]
+omit = */site-packages/*
