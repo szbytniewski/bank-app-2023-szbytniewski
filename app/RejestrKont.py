@@ -8,13 +8,12 @@ class RejestrKont:
         cls.listaKont.append(konto)
 
     @classmethod
-    def search_by_pesel(cls,pesel):
-        listOfTheSame = []
-        for konto in cls.listaKont:
+    def search_by_pesel(self, pesel):
+        for konto in self.listaKont:
             if konto.pesel == pesel:
-                listOfTheSame.append(konto)
-        return listOfTheSame if len(listOfTheSame) != 0 else False
-
+                return konto
+        return None
     @classmethod
     def ammount_of_accounts(cls):
         return len(cls.listaKont)
+    
