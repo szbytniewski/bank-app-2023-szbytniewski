@@ -31,10 +31,9 @@ class TestAccountRegister(unittest.TestCase):
         self.assertEqual(RejestrKont.ammount_of_accounts(),3)
 
     def test_search_account_by_pesel(self):
-        konto = KontoOsobiste(self.personal_data["name"], self.personal_data["surname"], self.personal_data["pesel"])
+        konto = KontoOsobiste(self.personal_data["name"], self.personal_data["surname"], "12345678901")
         konto2 = KontoOsobiste(self.personal_data["name"], self.personal_data["surname"], self.personal_data["pesel"])
         RejestrKont.add_account(konto) 
-        self.assertIn(konto,RejestrKont.search_by_pesel('66092909876'))
-        self.assertNotIn(konto2,RejestrKont.search_by_pesel('66092909876'))
-        self.assertEqual(RejestrKont.search_by_pesel('66092909871'), False)
+        self.assertEqual(RejestrKont.search_by_pesel('12345678901'), konto)
+        self.assertEqual(RejestrKont.search_by_pesel('66092909871'), None)
         
