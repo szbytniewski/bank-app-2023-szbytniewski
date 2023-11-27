@@ -1,6 +1,8 @@
 import requests
 import unittest
 
+from ..RejestrKont import RejestrKont
+
 class TestAccountCrud(unittest.TestCase):
     def setUp(self):
         self.url = "http://127.0.0.1:5000/api/accounts"
@@ -33,3 +35,14 @@ class TestAccountCrud(unittest.TestCase):
         response = requests.delete(self.url + "/12345678901")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"message": "Konto zostało usunięte"})
+
+    def test_7_check_if_unique_pesel(self):
+        response = requests.post(self.url, json={"name": "Jan", "surname": "Kowalski", "pesel": "22345678901"})
+        response2 = requests.post(self.url, json={"name": "Jan", "surname": "Kowalski", "pesel": "22345678901"})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response2.status_code, 409)
+
+
+
+    def tearDown(self):
+        requests.delete("http://127.0.0.1:5000/api/accounts" + "/22345678901")
