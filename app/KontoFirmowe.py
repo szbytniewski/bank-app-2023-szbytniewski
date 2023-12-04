@@ -44,9 +44,7 @@ class KontoFirmowe(Konto):
 
     def check_nip_exsistance(self):
         result = requests.get(nipValidateURL + self.nip + '?date=' + datetime.date.today())
-        print(result.json())
-
+        print(f"Response dla nipu: {result.status_code}, {result.json()}")
         if result.status_code == 200:
             return True
-        else:
-            return False
+        return False

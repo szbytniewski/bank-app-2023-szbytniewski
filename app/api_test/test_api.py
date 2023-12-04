@@ -42,7 +42,27 @@ class TestAccountCrud(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response2.status_code, 409)
 
-
+    def test_8_transfer_by_pesel_search(self):
+        requests.post(self.url, json={"name": "Jan", "surname": "Kowalski", "pesel": "12345678901"})
+        #1. Test incoming transfer
+        response = requests.post(self.url + "/12345678901/transfer", json={"ammount": 500, "type": "incoming"})
+        response1 = requests.get(self.url + "/12345678901")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response1.json()["saldo"], 500)
+        #2. Test udany outgoing transfer
+        response2 = requests.post(self.url + "/12345678901/transfer", json={"ammount": 100, "type": "outgoing"})
+        response3 = requests.get(self.url + "/12345678901")
+        self.assertEqual(response2.status_code, 200)
+        self.assertEqual(response3.json()["saldo"], 400)
+        # 3. Test na nieudany outgoing transfer(not enough balance)
+        response4 = requests.post(self.url + "/12345678901/transfer", json={"ammount": 500, "type": "outgoing"})
+        response5 = requests.get(self.url + "/12345678901")
+        self.assertEqual(response4.status_code, 200)
+        self.assertEqual(response5.json()["saldo"], 400)
+        # 4. test na nieudany incoming transfer(nie znaleziono konto)
+        response6 = requests.post(self.url + "/43215678901/transfer", json={"ammount": 100, "type": "incoming"})
+        self.assertEqual(response6.status_code, 404)
+        
 
     def tearDown(self):
         requests.delete("http://127.0.0.1:5000/api/accounts" + "/22345678901")
