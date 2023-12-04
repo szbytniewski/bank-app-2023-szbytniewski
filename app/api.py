@@ -58,7 +58,10 @@ def przelew_po_peselu(pesel):
     konto = RejestrKont.search_by_pesel(pesel)
     if konto is not None:
         dane = request.get_json()
-
+        if dane["type"] == "incoming":
+            konto.zaksieguj_przelew_przychodzacy(dane["ammount"])
+        elif dane["type"] == "outgoing":
+            konto.przelew_wychodzacy(dane["ammount"])
         return jsonify({"message": "Zlecenie przyjeto do realizacji"}), 200
     else:
         return jsonify({"messeage": "Nie ma podanego konta"}), 404
