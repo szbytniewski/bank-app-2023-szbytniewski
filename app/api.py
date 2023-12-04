@@ -62,3 +62,4 @@ def przelew_po_peselu(pesel):
         return jsonify({"message": "Zlecenie przyjeto do realizacji"}), 200
     else:
         return jsonify({"messeage": "Nie ma podanego konta"}), 404
+    

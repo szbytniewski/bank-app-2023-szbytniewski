@@ -1,4 +1,11 @@
+import requests, datetime, os
+
+from dotenv import load_dotenv
 from .Konto import Konto
+
+load_dotenv()
+
+nipValidateURL = os.getenv('BANK_APP_MF_URL', 'https://wl-test.mf.gov.pl/')
 
 class KontoFirmowe(Konto):
 
@@ -12,6 +19,10 @@ class KontoFirmowe(Konto):
             self.nip = "Niepoprawny NIP!"
         else:
             self.nip = nip
+            result = self.check_nip_exsistance()
+            if result == False:
+                raise Exception("Nip nie istnieje w gov")
+            
 
     def check_credit_ammount(self,n):
         if(self.saldo >= n*2):
@@ -30,3 +41,12 @@ class KontoFirmowe(Konto):
             self.saldo = self.saldo + kwota
             return True
         return False
+
+    def check_nip_exsistance(self):
+        result = requests.get(nipValidateURL + self.nip + '?date=' + datetime.date.today())
+        print(result.json())
+
+        if result.status_code == 200:
+            return True
+        else:
+            return False
