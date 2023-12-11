@@ -67,27 +67,5 @@ class KontoOsobiste(Konto):
             return True
         return False
     
-    # Old version the getting a credit
-    # def check_if_3_deposit_condition(self):
-    #     for x in range(3):
-    #         check_number = self.history[len(self.history)-x-1]
-    #         if(check_number < 0):
-    #             return False
-    #     return True
-
-    # def check_if_5_payments_condition(self, kwota):
-    #     check_sum = sum(self.history[-5:])
-    #     if(check_sum > kwota):
-    #         return True
-    #     return False
-
-    # def taking_loan(self,kwota):
-    #     if(len(self.history) >= 3):
-    #         if(self.check_if_3_deposit_condition() == True or self.check_if_5_payments_condition(kwota) == True):
-    #             self.saldo = self.saldo + kwota
-    #             return True
-    #         else:
-    #             return False
-    #     else:
-    #         return False
+    # Dodac funkcje wyslanie maila
     

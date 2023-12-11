@@ -5,7 +5,7 @@ from .Konto import Konto
 
 load_dotenv()
 
-nipValidateURL = os.getenv('BANK_APP_MF_URL', 'https://wl-test.mf.gov.pl/')
+nipValidateURL = os.getenv('BANK_APP_MF_URL', 'https://wl-api.mf.gov.pl/api/search/nip/')
 
 class KontoFirmowe(Konto):
 
@@ -48,3 +48,5 @@ class KontoFirmowe(Konto):
         if result.status_code == 200:
             return True
         return False
+    
+    # Dodac funckcje wyslanie maila
