@@ -1,6 +1,12 @@
-from .Konto import Konto
+from pymongo import MongoClient
+
+from .KontoOsobiste import KontoOsobiste
+
 
 class RejestrKont:
+    client = MongoClient('localhost', 27017)
+    db = client['bank-app']
+    collection = db['konto']
     listaKont = []
 
     @classmethod
@@ -17,3 +23,20 @@ class RejestrKont:
     def ammount_of_accounts(cls):
         return len(cls.listaKont)
     
+    @classmethod
+    def save(cls):
+        cls.collection.delete_many({})
+        for konto in cls.listaKont:
+            cls.collection.insert_one(konto.__dict__)
+        return True
+
+    @classmethod
+    def load(cls):
+        cls.listaKont.clear()
+        for konto_data in cls.collection.find():
+            konto = KontoOsobiste(konto_data["name"], konto_data["nazwisko"], konto_data["pesel"])
+            konto.history = konto_data["history"]
+            konto.saldo = konto_data["saldo"]
+            cls.listaKont.append(konto)
+        return True
+

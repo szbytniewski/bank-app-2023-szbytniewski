@@ -65,3 +65,13 @@ def przelew_po_peselu(pesel):
         return jsonify({"message": "Zlecenie przyjeto do realizacji"}), 200
     else:
         return jsonify({"messeage": "Nie ma podanego konta"}), 404
+    
+@app.route("/api/accounts/save", methods=["PATCH"])
+def zapisane_konto_do_bazy():
+    RejestrKont.save()
+    return jsonify({"message": "Udalo sie "}), 200
+
+@app.route("/api/accounts/load", methods=["PATCH"])
+def zaladowanie_bazy_do_lsity():
+    RejestrKont.load()
+    return jsonify({"message": "Udało sie"}), 200
