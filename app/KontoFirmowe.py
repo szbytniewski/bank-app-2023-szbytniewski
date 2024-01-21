@@ -5,6 +5,7 @@ import requests
 from dotenv import load_dotenv
 
 from .Konto import Konto
+from .SMTPConnection import SMTPConnection
 
 load_dotenv()
 
@@ -52,3 +53,10 @@ class KontoFirmowe(Konto):
         if result.status_code == 200:
             return True
         return False
+    
+    def wyslij_historie_na_maila(self, adresat, smtp_connection):
+        today_date = datetime.date.today().strftime("%Y-%m-%d")
+        temat_maila = f"Wyciąg z dnia {today_date}"
+        tresc_maila = f"Historia konta Twojej firmy to: {self.history}"
+        
+        return smtp_connection.wyslij(temat_maila, tresc_maila, adresat)
