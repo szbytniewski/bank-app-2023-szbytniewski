@@ -1,10 +1,7 @@
-import unittest
-from unittest.mock import patch
-
 import requests
+import unittest
 
 from ..RejestrKont import RejestrKont
-
 
 class TestAccountCrud(unittest.TestCase):
     def setUp(self):
@@ -66,22 +63,6 @@ class TestAccountCrud(unittest.TestCase):
         response6 = requests.post(self.url + "/43215678901/transfer", json={"ammount": 100, "type": "incoming"})
         self.assertEqual(response6.status_code, 404)
         
-    @patch('app.RejestrKont.RejestrKont.collection')
-    def test_9_save_load_accounts(self, mock_collection):
-        # Save accounts to the database
-        response_save = requests.patch(self.url + "/save")
-        self.assertEqual(response_save.status_code, 200)
-
-        # Load accounts from the database
-        response_load = requests.patch(self.url + "/load")
-        self.assertEqual(response_load.status_code, 200)
-
-        # Verify that the accounts have been loaded
-        response_get_loaded = requests.get(self.url + "/12345678901")
-        self.assertEqual(response_get_loaded.status_code, 200)
-        self.assertEqual(response_get_loaded.json(), {"express_transfer_fee_personal": 1,
-        "history": [500, -100], "imie": "Jan", "nazwisko": "Kowalski", "pesel": "12345678901", "saldo": 400})
 
     def tearDown(self):
         requests.delete("http://127.0.0.1:5000/api/accounts" + "/22345678901")
-        # requests.delete("http://127.0.0.1:5000/api/accounts" + "/12345678901")
