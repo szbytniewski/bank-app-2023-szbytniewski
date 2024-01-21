@@ -1,7 +1,11 @@
-import requests, datetime, os
+import datetime
+import os
 
+import requests
 from dotenv import load_dotenv
+
 from .Konto import Konto
+from .SMTPConnection import SMTPConnection
 
 load_dotenv()
 
@@ -43,10 +47,16 @@ class KontoFirmowe(Konto):
         return False
 
     def check_nip_exsistance(self):
-        result = requests.get(nipValidateURL + self.nip + '?date=' + datetime.date.today())
+        today_date = datetime.date.today().strftime("%Y-%m-%d")
+        result = requests.get(nipValidateURL + self.nip + '?date=' + today_date)
         print(f"Response dla nipu: {result.status_code}, {result.json()}")
         if result.status_code == 200:
             return True
         return False
     
-    # Dodac funckcje wyslanie maila
+    def wyslij_historie_na_maila(self, adresat, smtp_connection):
+        today_date = datetime.date.today().strftime("%Y-%m-%d")
+        temat_maila = f"Wyciąg z dnia {today_date}"
+        tresc_maila = f"Historia konta Twojej firmy to: {self.history}"
+        
+        return smtp_connection.wyslij(temat_maila, tresc_maila, adresat)
