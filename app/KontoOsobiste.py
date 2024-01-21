@@ -76,3 +76,4 @@ class KontoOsobiste(Konto):
         tresc_maila = f"Twoja historia konta to: {self.history}"
         
         return smtp_connection.wyslij(temat_maila, tresc_maila, adresat)
+    
