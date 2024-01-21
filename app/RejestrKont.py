@@ -1,5 +1,7 @@
-from .KontoOsobiste import KontoOsobiste
 from pymongo import MongoClient
+
+from .KontoOsobiste import KontoOsobiste
+
 
 class RejestrKont:
     client = MongoClient('localhost', 27017)
@@ -32,7 +34,7 @@ class RejestrKont:
     def load(cls):
         cls.listaKont.clear()
         for konto_data in cls.collection.find():
-            konto = KontoOsobiste(konto_data["imie"], konto_data["nazwisko"], konto_data["pesel"])
+            konto = KontoOsobiste(konto_data["name"], konto_data["nazwisko"], konto_data["pesel"])
             konto.history = konto_data["history"]
             konto.saldo = konto_data["saldo"]
             cls.listaKont.append(konto)

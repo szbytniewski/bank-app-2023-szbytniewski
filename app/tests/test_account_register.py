@@ -1,7 +1,9 @@
 import unittest
+from unittest.mock import patch
 
 from ..KontoOsobiste import KontoOsobiste
 from ..RejestrKont import RejestrKont
+
 
 class TestAccountRegister(unittest.TestCase):
     personal_data = {
@@ -36,4 +38,24 @@ class TestAccountRegister(unittest.TestCase):
         RejestrKont.add_account(konto) 
         self.assertEqual(RejestrKont.search_by_pesel('12345678901'), konto)
         self.assertEqual(RejestrKont.search_by_pesel('66092909871'), None)
-        
+    
+    @patch('app.RejestrKont.RejestrKont.collection')
+    def test_save_load_accounts(self, mock_collection):
+        mock_data = [
+            {"name": "Jan", "nazwisko": "Kowalski", "pesel": "89092909875", "saldo": 1000, "history": []}
+        ]
+        mock_collection.find.return_value = mock_data
+
+        RejestrKont.save()
+
+        RejestrKont.listaKont.clear()
+
+        RejestrKont.load()
+
+        self.assertEqual(len(RejestrKont.listaKont), 1)
+        loaded_account = RejestrKont.listaKont[0].__dict__
+        self.assertEqual(loaded_account["imie"], 'Jan')
+        self.assertEqual(loaded_account["nazwisko"], 'Kowalski')
+        self.assertEqual(loaded_account["pesel"], '89092909875')
+        self.assertEqual(loaded_account["saldo"], 1000)
+        self.assertEqual(loaded_account["history"], [])
