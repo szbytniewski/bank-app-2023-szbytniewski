@@ -1,11 +1,14 @@
-import requests, datetime, os
+import datetime
+import os
 
+import requests
 from dotenv import load_dotenv
+
 from .Konto import Konto
 
 load_dotenv()
 
-nipValidateURL = os.getenv('BANK_APP_MF_URL', 'https://wl-test.mf.gov.pl/')
+nipValidateURL = os.getenv('BANK_APP_MF_URL', 'https://wl-api.mf.gov.pl/api/search/nip/')
 
 class KontoFirmowe(Konto):
 
@@ -43,7 +46,8 @@ class KontoFirmowe(Konto):
         return False
 
     def check_nip_exsistance(self):
-        result = requests.get(nipValidateURL + self.nip + '?date=' + datetime.date.today())
+        today_date = datetime.date.today().strftime("%Y-%m-%d")
+        result = requests.get(nipValidateURL + self.nip + '?date=' + today_date)
         print(f"Response dla nipu: {result.status_code}, {result.json()}")
         if result.status_code == 200:
             return True
