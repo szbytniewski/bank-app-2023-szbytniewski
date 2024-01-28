@@ -4,3 +4,4 @@ requests
 python-dotenv
 pymongo==3.12
 behave
+flask
