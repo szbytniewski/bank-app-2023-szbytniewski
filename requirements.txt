@@ -4,4 +4,3 @@ requests
 python-dotenv
 pymongo==3.12
 behave
-unittest_assertion
