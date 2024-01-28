@@ -7,57 +7,54 @@ assert_equal = AssertEqual()
 URL = "http://localhost:5000"
 
 
-@when('I create an account using name: {name}, last name: {last_name}, pesel: {pesel}')
-def utworz_konto(context, name, last_name, pesel):
-    json_body = { "name": f"{name}",
-    "surname": f"{last_name}",
-    "pesel": f"{pesel}"
-    }
-    create_resp = requests.post(URL + "/api/accounts", json = json_body)
-    assert_equal(create_resp.status_code, 201)
+@when('I create an account using name: "{firstName}", last name: "{lastName}", pesel: "{pesel}"')
+def create_account(context, firstName, lastName, pesel):
+    json_body = {"name": f"{firstName}", "surname": f"{lastName}", "pesel": f"{pesel}"}
+    response = requests.post(URL + "/api/accounts", json=json_body)
+    assert_equal(response.status_code, 201)
 
 
 @step('Number of accounts in registry equals: "{count}"')
-def sprawdz_liczbe_kont_w_rejestrze(context, count):
-    ile_kont = requests.get(URL + f"/api/accounts/count")
-    assert_equal(ile_kont.json()["ilosc_kont_w_rejestrze"], int(count))
+def check_number_of_accounts_in_registry(context, count):
+    number_of_accounts = requests.get(URL + "/api/accounts/count")
+    assert_equal(number_of_accounts.json()["iloscKont"], int(count))
 
 
 @step('Account with pesel "{pesel}" exists in registry')
-def sprawdz_czy_konto_z_pesel_istnieje(context, pesel):
-    #TODO assert czy konto z peselem istnieje
-    pass
-
+def check_if_account_with_pesel_exists(context, pesel):
+    response = requests.get(URL + f"/api/accounts/{pesel}")
+    assert_equal(response.status_code, 200)
 
 @step('Account with pesel "{pesel}" does not exists in registry')
-def sprawdz_czy_konto_z_pesel_nie_istnieje(context, pesel):
-    #TODO assert czy konto z peselem nie istnieje
-    pass
-
+def check_if_account_with_pesel_doesnt_exist(context, pesel):
+    response = requests.get(URL + f"/api/accounts/{pesel}")
+    assert_equal(response.status_code, 404)
 
 @when('I delete account with pesel: "{pesel}"')
-def usun_konto(context, pesel):
-    #TODO
+def delete_account(context, pesel):
+    message = requests.delete(URL + f"/api/accounts/{pesel}")
+    assert_equal(message.json(), {"message": "Konto zostało usunięte"})
 
 
-   @when('I save the account registry')
-   def zapisz_konta(context):
-       resp = requests.patch(URL  + f"/api/accounts/save")
-       assert_equal(resp.status_code, 200)
+@when("I save the account registry")
+def save_accounts(context):
+    resp = requests.patch(URL + f"/api/accounts/save")
+    assert_equal(resp.status_code, 200)
 
 
-   @when('I load the account registry')
-   def load_rejestr(context):
-       #TODO
+@when("I load the account registry")
+def load_accounts(context):
+    resp = requests.patch(URL  + f"/api/accounts/load")
+    assert_equal(resp.status_code, 200)
 
 
-    @when('I update last name in account with pesel "{pesel}" to "{last_name}"')
-    def update_nazwiska(context, pesel, last_name):
-        #TODO       
-        pass
+@when('I update last name in account with pesel "{pesel}" to "{last_name}"')
+def update_last_name(context, pesel, last_name):
+    response = requests.patch(URL + f"/api/accounts/{pesel}", json={"lastName": last_name})
+    assert_equal(response.status_code, 200)
 
 
-   @then('Last name in account with pesel "{pesel}" is "{last_name}"')
-   def sprawdzenie_nazwiska(context, pesel, last_name):
-        #TODO
-        pass
+@then('The last name of account with pesel "{pesel}" is "{last_name}"')
+def check_last_name(context, pesel, last_name):
+    response = requests.get(URL + f"/api/accounts/{pesel}")
+    assert_equal(response.json()['lastName'], last_name)

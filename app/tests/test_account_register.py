@@ -42,7 +42,7 @@ class TestAccountRegister(unittest.TestCase):
     @patch('app.RejestrKont.RejestrKont.collection')
     def test_save_load_accounts(self, mock_collection):
         mock_data = [
-            {"name": "Jan", "nazwisko": "Kowalski", "pesel": "89092909875", "saldo": 1000, "history": []}
+            {"imie": "Jan", "nazwisko": "Kowalski", "pesel": "89092909875", "saldo": 1000, "history": []}
         ]
         mock_collection.find.return_value = mock_data
 
