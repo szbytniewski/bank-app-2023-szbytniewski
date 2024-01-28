@@ -6,3 +6,4 @@ pymongo==3.12
 behave
 flask
 unittest_assertions
+selenium
