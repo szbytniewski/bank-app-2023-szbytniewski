@@ -3,7 +3,7 @@ import unittest
 
 import requests
 
-BASE_URL = "http://localhost:5000/api/accounts" 
+BASE_URL = "http://localhost:5000/api/accounts"
 
 class TestApiPerformance(unittest.TestCase):
 
