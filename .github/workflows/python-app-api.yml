@@ -48,6 +48,6 @@ jobs:
           python -m unittest app/api_test/test_api.py
       - name: Run Performace test
         run: |
-          python -m unittest app/api_test/test_api.py
+          python -m unittest app/api_test/test_performance.py
       - name: Stop Flask application
         run: pkill -f "flask --app app/api.py"
